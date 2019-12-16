@@ -4,6 +4,9 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/NPRscraper";
+
+mongoose.connect(MONGODB_URI);
 
 const db = require('./models')
 
@@ -13,9 +16,6 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/NPRscraper";
-
-mongoose.connect(MONGODB_URI);
 
 const exphbs = require('express-handlebars');
 
@@ -96,7 +96,7 @@ app.get("/articles/:id", function(req, res) {
 
   app.get('/delete', function(req, res){
 
-      db.Article.remove({}).then(function(data){
+      db.Article.deleteMany({}).then(function(data){
           console.log(data)
       }).catch(function(err){
           res.json(err);
